@@ -5,7 +5,7 @@ let cachedPromise = null;
 async function connectDB() {
   const uri = process.env.MONGODB_URI;
   if (!uri) {
-    throw new Error('MONGODB_URI .env dosyasında tanımlı değil.');
+    throw new Error('MONGODB_URI ortam değişkeni tanımlı değil. Vercel > Settings > Environment Variables bölümüne ekleyip Redeploy yapın.');
   }
 
   if (mongoose.connection.readyState === 1) {
@@ -13,8 +13,13 @@ async function connectDB() {
   }
 
   if (!cachedPromise) {
+    mongoose.set('bufferCommands', false);
     cachedPromise = mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 10000
+      serverSelectionTimeoutMS: 10000,
+      maxPoolSize: 5
+    }).catch((err) => {
+      cachedPromise = null;
+      throw err;
     });
   }
 

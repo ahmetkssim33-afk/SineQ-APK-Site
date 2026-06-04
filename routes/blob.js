@@ -20,7 +20,7 @@ router.post('/upload', async (req, res, next) => {
       request: req,
       body: req.body,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
-        if (!req.session?.isAdmin) {
+        if (!req.admin?.id) {
           throw new Error('Yetkisiz işlem. Lütfen admin paneline tekrar giriş yapın.');
         }
 

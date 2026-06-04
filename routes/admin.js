@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
       publishedCount,
       formatBytes,
       formatDate,
-      username: req.session.username
+      username: req.admin.username
     });
   } catch (err) {
     next(err);

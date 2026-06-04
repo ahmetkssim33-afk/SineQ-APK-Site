@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
 const Admin = require('../models/Admin');
 const { redirectIfLoggedIn } = require('../middleware/auth');
+const { createAdminToken, cookieOptions } = require('../utils/authToken');
 
 const router = express.Router();
 
@@ -32,8 +33,7 @@ router.post('/login', loginLimiter, redirectIfLoggedIn, async (req, res, next) =
       return res.status(401).render('admin/login', { title: 'Admin Giriş', error: 'Kullanıcı adı veya şifre hatalı.' });
     }
 
-    req.session.adminId = admin._id.toString();
-    req.session.username = admin.username;
+    res.cookie('sineq_admin', createAdminToken(admin), cookieOptions());
     res.redirect('/admin');
   } catch (err) {
     next(err);
@@ -41,10 +41,8 @@ router.post('/login', loginLimiter, redirectIfLoggedIn, async (req, res, next) =
 });
 
 router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie('sineq.sid');
-    res.redirect('/admin/login');
-  });
+  res.clearCookie('sineq_admin', { path: '/' });
+  res.redirect('/admin/login');
 });
 
 module.exports = router;

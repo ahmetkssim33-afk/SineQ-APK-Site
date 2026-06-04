@@ -1,71 +1,61 @@
 # SineQ APK İndirme Sitesi - Vercel Blob Sürümü
 
-Bu sürüm Vercel için hazırlandı.
+Bu sürüm Vercel için düzenlendi ve önceki 500 hatasına sebep olabilecek session/store yapısı kaldırıldı.
+Admin oturumu Mongo session yerine güvenli imzalı cookie ile çalışır.
 
-## Özellikler
+## Vercel Environment Variables
 
-- Node.js + Express
-- MongoDB Atlas
-- Vercel Blob ile APK/logo yükleme
-- Admin giriş sistemi
-- Admin dashboard
-- APK yayınlama/taslak yapma
-- İndirme sayacı
-- Ana sayfa, detay sayfası, indirme sayfası
-- Gizlilik Politikası, Kullanım Şartları, İletişim, İçerik Kaldırma
-
-## Yerel kurulum
-
-```bash
-npm install
-copy .env.example .env
-npm run create-admin
-npm run dev
-```
-
-Admin panel:
-
-```txt
-http://localhost:3000/admin
-```
-
-## Vercel yayınlama
-
-1. Projeyi GitHub'a yükle.
-2. Vercel > Add New Project > GitHub reposunu seç.
-3. Environment Variables kısmına şunları ekle:
+Vercel > Settings > Environment Variables bölümünde şunlar olmalı:
 
 ```env
 NODE_ENV=production
 MONGODB_URI=mongodb+srv://USER:PASSWORD@cluster.mongodb.net/sineq_apk_store
 SESSION_SECRET=uzun_cok_guclu_bir_secret_yaz
-BLOB_READ_WRITE_TOKEN=Vercel_Blob_token
+BLOB_READ_WRITE_TOKEN=Vercel Blob bağlantısından otomatik gelir
 UPLOAD_MAX_APK_MB=250
 UPLOAD_MAX_LOGO_MB=8
 ```
 
-4. Vercel Storage bölümünden Blob store oluştur ve projeye bağla.
-5. Deploy et.
+Environment Variable ekledikten sonra mutlaka:
 
-## Admin hesabı
-
-Admin hesabını en kolay kendi bilgisayarında oluştur:
-
-```bash
-copy .env.example .env
+```txt
+Deployments > son deployment > üç nokta > Redeploy
 ```
 
-`.env` içine canlı MongoDB Atlas bağlantını yaz. Sonra:
+yapın.
+
+## Hızlı kontrol
+
+Yayına aldıktan sonra şu adresi açın:
+
+```txt
+https://site-adresiniz.vercel.app/health
+```
+
+Burada `MONGODB_URI`, `SESSION_SECRET` ve `BLOB_READ_WRITE_TOKEN` true görünmeli.
+
+## Admin hesabı oluşturma
+
+Aynı MongoDB bağlantısıyla kendi bilgisayarınızda:
 
 ```bash
 npm install
+copy .env.example .env
 npm run create-admin
 ```
 
-Bu işlem admin kullanıcısını MongoDB Atlas içine yazar. Vercel'deki site aynı database'e bağlı olduğu için admin girişi çalışır.
+Oluşturulan admin MongoDB'ye kaydedilir. Vercel sitesi aynı MongoDB'ye bağlıysa giriş yapılır.
 
-## Önemli
+## Admin panel
 
-- APK/logo dosyaları yerel diske değil Vercel Blob'a yüklenir.
-- Kullanıcı indirme butonuna bastığında sayaç +1 artar ve Blob URL'ye yönlendirilir.
-- Büyük APK dosyaları için client-side multipart Blob upload kullanılır.
+```txt
+/admin
+```
+
+## Düzeltilenler
+
+- Vercel üzerinde 500 hatasına sebep olabilecek `connect-mongo` session store kaldırıldı.
+- Admin giriş sistemi imzalı cookie ile serverless uyumlu hale getirildi.
+- Blob upload kontrolündeki hata düzeltildi: upload artık giriş yapan admini doğru tanır.
+- `/health` kontrol adresi eklendi.
+- MongoDB bağlantı hatalarında yeniden deneme yapılacak şekilde düzenlendi.
