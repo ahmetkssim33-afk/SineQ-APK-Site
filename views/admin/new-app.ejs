@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <a class="brand" href="/admin"><span class="brand-main">SineQ</span><span class="brand-sub">qasimflix</span></a>
+    <div class="admin-actions"><a href="/admin">Dashboard</a></div>
+  </header>
+
+  <main class="admin-page narrow">
+    <section class="admin-table-card">
+      <h1>Yeni APK Yayınla</h1>
+      <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+      <div class="upload-note">
+        Dosyalar Vercel Blob üzerine güvenli şekilde yüklenir. Yükleme bitmeden sayfayı kapatmayın.
+      </div>
+
+      <form class="form" id="publishForm" method="post" action="/admin/apps">
+        <label>Uygulama Adı
+          <input type="text" name="appName" required value="<%= values.appName || '' %>" placeholder="Örn: SineQ" />
+        </label>
+        <label>Versiyon
+          <input type="text" name="version" required value="<%= values.version || '' %>" placeholder="Örn: v1.0.2" />
+        </label>
+        <label>Uygulama Açıklaması
+          <textarea name="description" required rows="7" placeholder="Uygulama hakkında detaylı bilgi"><%= values.description || '' %></textarea>
+        </label>
+        <label>Sürüm Notları
+          <textarea name="changelog" rows="4" placeholder="Bu sürümde neler değişti?"><%= values.changelog || '' %></textarea>
+        </label>
+        <label>Uygulama Logosu
+          <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp" required />
+        </label>
+        <label>APK Dosyası
+          <input id="apkFile" type="file" accept=".apk,application/vnd.android.package-archive" required />
+        </label>
+
+        <input type="hidden" name="logoUrl" id="logoUrl" />
+        <input type="hidden" name="apkUrl" id="apkUrl" />
+        <input type="hidden" name="apkOriginalName" id="apkOriginalName" />
+        <input type="hidden" name="apkSizeBytes" id="apkSizeBytes" />
+
+        <label>Durum
+          <select name="status">
+            <option value="published">Yayınla</option>
+            <option value="draft">Taslak</option>
+          </select>
+        </label>
+
+        <div class="progress-wrap" id="progressWrap" hidden>
+          <div class="progress-title" id="progressTitle">Yükleniyor...</div>
+          <div class="progress-bar"><span id="progressBar"></span></div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <button id="submitBtn" type="submit">Yayınla</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="/js/blob-upload.js"></script>
+</body>
+</html>

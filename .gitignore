@@ -1,0 +1,7 @@
+node_modules
+.env
+uploads/apks/*
+uploads/logos/*
+!uploads/apks/.gitkeep
+!uploads/logos/.gitkeep
+.DS_Store

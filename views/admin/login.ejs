@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="admin-bg">
+  <section class="login-card">
+    <a class="brand login-brand" href="/">
+      <span class="brand-main">SineQ</span>
+      <span class="brand-sub">qasimflix</span>
+    </a>
+    <h1>Admin Giriş</h1>
+    <% if (error) { %><div class="alert"><%= error %></div><% } %>
+    <form method="post" action="/admin/login" class="form">
+      <label>Kullanıcı adı
+        <input type="text" name="username" required autocomplete="username" />
+      </label>
+      <label>Şifre
+        <input type="password" name="password" required autocomplete="current-password" />
+      </label>
+      <button type="submit">Giriş Yap</button>
+    </form>
+  </section>
+</body>
+</html>

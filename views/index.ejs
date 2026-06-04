@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<section class="hero">
+  <div>
+    <p class="eyebrow">APK İndirme Merkezi</p>
+    <h1>Güvenli ve sade SineQ uygulama arşivi.</h1>
+    <p>Yayınlanan APK sürümlerini görüntüle, detaylarını incele ve tek tıkla indir.</p>
+  </div>
+</section>
+
+<section class="section-head">
+  <h2>Son Yayınlananlar</h2>
+  <span><%= apps.length %> uygulama</span>
+</section>
+
+<% if (!apps.length) { %>
+  <div class="empty">Henüz yayınlanan APK bulunmuyor.</div>
+<% } %>
+
+<div class="app-grid">
+  <% apps.forEach(app => { %>
+    <a class="app-card" href="/app/<%= app.slug %>">
+      <img src="<%= app.logoPath %>" alt="<%= app.appName %> logosu" />
+      <div>
+        <h3><%= app.appName %></h3>
+        <p><%= app.version %></p>
+        <small><%= app.downloadCount %> indirme · <%= formatBytes(app.apkSizeBytes) %></small>
+      </div>
+    </a>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,8 @@
+<%- include('partials/header') %>
+<section class="static-card">
+  <h1><%= heading %></h1>
+  <% body.forEach(paragraph => { %>
+    <p><%= paragraph %></p>
+  <% }) %>
+</section>
+<%- include('partials/footer') %>

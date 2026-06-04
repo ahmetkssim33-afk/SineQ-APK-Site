@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <a class="brand" href="/admin">
+      <span class="brand-main">SineQ</span>
+      <span class="brand-sub">qasimflix</span>
+    </a>
+    <div class="admin-actions">
+      <span><%= username %></span>
+      <a href="/admin/apps/new">Yeni APK</a>
+      <form method="post" action="/admin/logout"><button>Çıkış</button></form>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <section class="stats-grid">
+      <div class="stat-card"><small>Yayındaki APK</small><strong><%= publishedCount %></strong></div>
+      <div class="stat-card"><small>Toplam APK</small><strong><%= apps.length %></strong></div>
+      <div class="stat-card"><small>Toplam İndirme</small><strong><%= totalDownloads %></strong></div>
+    </section>
+
+    <section class="admin-table-card">
+      <div class="section-head"><h1>APK İstatistikleri</h1><a class="mini-btn" href="/admin/apps/new">APK Yayınla</a></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Uygulama</th>
+              <th>Sürüm</th>
+              <th>Boyut</th>
+              <th>Durum</th>
+              <th>İndirme</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% apps.forEach(app => { %>
+            <tr>
+              <td class="app-cell"><img src="<%= app.logoPath %>" alt="" /><span><%= app.appName %></span></td>
+              <td><%= app.version %></td>
+              <td><%= formatBytes(app.apkSizeBytes) %></td>
+              <td><span class="badge <%= app.status %>"><%= app.status === 'published' ? 'Yayında' : 'Taslak' %></span></td>
+              <td><strong><%= app.downloadCount %></strong></td>
+              <td class="row-actions">
+                <a href="/app/<%= app.slug %>" target="_blank">Gör</a>
+                <form method="post" action="/admin/apps/<%= app._id %>/status"><button><%= app.status === 'published' ? 'Taslak yap' : 'Yayınla' %></button></form>
+                <form method="post" action="/admin/apps/<%= app._id %>?_method=DELETE" onsubmit="return confirm('Silinsin mi?')"><button class="danger">Sil</button></form>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

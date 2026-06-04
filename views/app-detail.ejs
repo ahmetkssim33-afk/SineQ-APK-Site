@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<section class="detail-card">
+  <div class="detail-top">
+    <img class="detail-logo" src="<%= app.logoPath %>" alt="<%= app.appName %> logosu" />
+    <div>
+      <p class="eyebrow">SineQ APK</p>
+      <h1><%= app.appName %></h1>
+      <div class="meta-row">
+        <span>Sürüm: <%= app.version %></span>
+        <span>Boyut: <%= formatBytes(app.apkSizeBytes) %></span>
+        <span>İndirme: <%= app.downloadCount %></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-box">
+    <h2>Hakkında</h2>
+    <p><%= app.description %></p>
+  </div>
+
+  <% if (app.changelog) { %>
+    <div class="content-box">
+      <h2>Sürüm Notları</h2>
+      <p><%= app.changelog %></p>
+    </div>
+  <% } %>
+
+  <a class="download-btn" href="/download/<%= app._id %>">Şimdi İndir</a>
+  <p class="safe-note">İndirmeden önce uygulamanın kaynağını ve cihaz izinlerini kontrol etmeniz önerilir.</p>
+</section>
+<%- include('partials/footer') %>
