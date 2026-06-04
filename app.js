@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 
 const publicRoutes = require('./routes/public');
 const authRoutes = require('./routes/auth');
@@ -31,6 +32,20 @@ app.use(attachAdmin);
 
 app.use('/css', express.static(path.join(__dirname, 'public', 'css'), { maxAge: '7d' }));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js'), { maxAge: '7d' }));
+
+// Tarayıcı/Vercel favicon isteği 404 loglarını kirletmesin.
+app.get(['/favicon.ico', '/favicon.png'], (req, res) => res.status(204).end());
+
+// Vercel serverless ortamında her dinamik istekte Mongo bağlantısını garantiye al.
+// Böylece AppRelease.find() gibi sorgular bağlantı açılmadan çalışıp 10 sn timeout vermez.
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.get('/health', (req, res) => {
   res.json({

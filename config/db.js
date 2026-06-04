@@ -15,7 +15,9 @@ async function connectDB() {
   if (!cachedPromise) {
     mongoose.set('bufferCommands', false);
     cachedPromise = mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
+      socketTimeoutMS: 20000,
       maxPoolSize: 5
     }).catch((err) => {
       cachedPromise = null;

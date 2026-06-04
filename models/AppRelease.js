@@ -61,7 +61,7 @@ const appReleaseSchema = new mongoose.Schema(
       default: ''
     }
   },
-  { timestamps: true }
+  { timestamps: true, bufferCommands: false }
 );
 
 module.exports = mongoose.model('AppRelease', appReleaseSchema);
